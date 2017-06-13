@@ -286,7 +286,10 @@ class DiffEv:
         
         Loads the pickled string into the this object. See pickle_string.
         '''
-        obj = pickle.loads(pickled_string, encoding='latin1')
+        if sys.version_info.major == 3:
+            obj = pickle.loads(pickled_string, encoding='latin1')
+        else:
+            obj = pickle.loads(pickled_string)
         obj.create_mutation_table()
         self.safe_copy(obj)
 

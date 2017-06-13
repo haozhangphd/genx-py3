@@ -9,6 +9,7 @@ Last changed: 2016 09 20
 import inspect
 import io
 # Standard libraries
+import sys
 import os
 import pickle
 import traceback
@@ -107,25 +108,37 @@ class Model:
         except Exception as e:
             raise IOError('Could not open file.', filename)
         try:
-            new_data = pickle.loads(loadfile.read('data'), encoding='latin1')
+            if sys.version_info.major == 3:
+                new_data = pickle.loads(loadfile.read('data'), encoding='latin1')
+            else:
+                new_data = pickle.loads(loadfile.read('data'))
             self.data.safe_copy(new_data)
         except Exception as e:
             print('Data section loading (gx file) error:\n ', e, '\n')
             raise IOError('Could not locate the data section.', filename)
         try:
-            self.script = pickle.loads(loadfile.read('script'), encoding='latin1')
+            if sys.version_info.major == 3:
+                self.script = pickle.loads(loadfile.read('script'), encoding='latin1')
+            else:
+                self.script = pickle.loads(loadfile.read('script'))
         except Exception as e:
             print('Script section loading (gx file) error:\n ', e, '\n')
             raise IOError('Could not locate the script.', filename)
 
         try:
-            new_parameters = pickle.loads(loadfile.read('parameters'), encoding='latin1')
+            if sys.version_info.major == 3:
+                new_parameters = pickle.loads(loadfile.read('parameters'), encoding='latin1')
+            else:
+                new_parameters = pickle.loads(loadfile.read('parameters'))
             self.parameters.safe_copy(new_parameters)
         except Exception as e:
             print('Script section loading (gx file) error:\n ', e, '\n')
             raise IOError('Could not locate the parameters section.', filename)
         try:
-            self.fom_func = pickle.loads(loadfile.read('fomfunction'), encoding='latin1')
+            if sys.version_info.major == 3:
+                self.fom_func = pickle.loads(loadfile.read('fomfunction'), encoding='latin1')
+            else:
+                self.fom_func = pickle.loads(loadfile.read('fomfunction'))
         except Exception:
             raise IOError('Could not locate the fomfunction section.', filename)
 

@@ -9,12 +9,14 @@ $Date::                                 $:  Date of last commit
 import genx.version
 __version__ = genx.version.version
 
+import sys
 from six.moves import _thread
 import time
 import wx, wx.adv, os, traceback
 from wx.lib.wordwrap import wordwrap
 import webbrowser
 import numpy as np
+import genx.help
 
 import genx.model as modellib
 import genx.solvergui
@@ -90,11 +92,16 @@ def open(frame, event):
                                  'Model not saved')
         if not ans:
            return
-     
-    dlg = wx.FileDialog(frame, message="Open", defaultFile="",\
-                        wildcard="GenX File and HDF5 GenX File (*.gx, *.gx3, *.hgx)|*.gx;*.gx3;*.hgx",\
-                         style=wx.FD_OPEN #| wx.FD_CHANGE_DIR
-                       )
+    if sys.version_info.major == 3:
+        dlg = wx.FileDialog(frame, message="Open", defaultFile="",\
+                            wildcard="GenX File and HDF5 GenX File (*.gx, *.gx3, *.hgx)|*.gx;*.gx3;*.hgx",\
+                             style=wx.FD_OPEN #| wx.FD_CHANGE_DIR
+                           )
+    else:
+        dlg = wx.FileDialog(frame, message="Open", defaultFile="",\
+                            wildcard="GenX File and HDF5 GenX File (*.gx, *.hgx)|*.gx;*.hgx",\
+                             style=wx.FD_OPEN #| wx.FD_CHANGE_DIR
+                           )
     if dlg.ShowModal() == wx.ID_OK:
         path = dlg.GetPath()
         open_model(frame, path)
@@ -226,10 +233,16 @@ def save_as(frame, event):
     
     Event handler for save as ...
     '''
-    dlg = wx.FileDialog(frame, message="Save As", defaultFile="",
-                        wildcard="HDF5 GenX File (*.hgx)|*.hgx|GenX File (*.gx3)|*.gx3",
-                        style=wx.FD_SAVE #| wx.FD_CHANGE_DIR
-                        )
+    if sys.version_info.major == 3:
+        dlg = wx.FileDialog(frame, message="Save As", defaultFile="",
+                            wildcard="HDF5 GenX File (*.hgx)|*.hgx|GenX File (*.gx3)|*.gx3",
+                            style=wx.FD_SAVE #| wx.FD_CHANGE_DIR
+                            )
+    else:
+        dlg = wx.FileDialog(frame, message="Save As", defaultFile="",
+                            wildcard="HDF5 GenX File (*.hgx)|*.hgx|GenX File (*.gx)|*.gx",
+                            style=wx.FD_SAVE #| wx.FD_CHANGE_DIR
+                            )
     if dlg.ShowModal() == wx.ID_OK:
         update_for_save(frame)
         fname = dlg.GetPath()
@@ -1076,7 +1089,7 @@ def update_data(frame, event):
 def fom_help(frame, event):
     '''Show a help dialog for information about the different fom.
     '''
-    dlg = help.PluginHelpDialog(frame, 'fom_funcs')
+    dlg = genx.help.PluginHelpDialog(frame, 'fom_funcs')
     dlg.Show()
 
 def models_help(frame, event):
@@ -1084,7 +1097,7 @@ def models_help(frame, event):
     
     Show a help dialog for information about the different models.
     '''
-    dlg = help.PluginHelpDialog(frame,'models')
+    dlg = genx.help.PluginHelpDialog(frame,'models')
     dlg.Show()
     
 def plugins_help(frame, event):
@@ -1092,7 +1105,7 @@ def plugins_help(frame, event):
     
     Show a help dialog for information about the different plugins.
     '''
-    dlg = help.PluginHelpDialog(frame,'plugins.add_ons')
+    dlg = genx.help.PluginHelpDialog(frame,'plugins.add_ons')
     dlg.Show()
 
 def data_loaders_help(frame, event):
@@ -1100,7 +1113,7 @@ def data_loaders_help(frame, event):
     
     Show a help dialog for information about the different data_loaders.
     '''
-    dlg = help.PluginHelpDialog(frame,'plugins.data_loaders')
+    dlg = genx.help.PluginHelpDialog(frame,'plugins.data_loaders')
     dlg.Show()    
     
 def show_manual(frame, event):

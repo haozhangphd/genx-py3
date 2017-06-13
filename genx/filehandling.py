@@ -9,11 +9,13 @@ $Date::                                 $:  Date of last commit
 '''
 from six.moves import configparser as CP
 import io
+import six
 import os
+import sys
 
 import h5py
 
-StringIO = io.StringIO
+StringIO = six.StringIO
 
 # Functions to save the gx files
 #==============================================================================
@@ -28,24 +30,42 @@ def save_file(fname, model, optimizer, config):
     :param config:
     :return:
     """
-    if fname.endswith('.gx3'):
-        save_gx(fname, model, optimizer, config)
-    elif fname.endswith('.hgx'):
-        save_hgx(fname, model, optimizer, config)
+
+    if sys.version_info.major == 3:
+        if fname.endswith('.gx3'):
+            save_gx(fname, model, optimizer, config)
+        elif fname.endswith('.hgx'):
+            save_hgx(fname, model, optimizer, config)
+        else:
+            raise IOError('Wrong file ending, should be .gx3 or .hgx')
     else:
-        raise IOError('Wrong file ending, should be .gx3 or .hgx')
+        if fname.endswith('.gx'):
+            save_gx(fname, model, optimizer, config)
+        elif fname.endswith('.hgx'):
+            save_hgx(fname, model, optimizer, config)
+        else:
+            raise IOError('Wrong file ending, should be .gx or .hgx')
+
 
     model.filename = os.path.abspath(fname)
     model.saved = True
 
 def load_file(fname, model, optimizer, config):
     """Loads parameters from fname into model, optimizer and config"""
-    if fname.endswith('.gx3') or fname.endswith('.gx'):
-        load_gx(fname, model, optimizer, config)
-    elif fname.endswith('.hgx'):
-        load_hgx(fname, model, optimizer, config)
+    if sys.version_info.major == 3:
+        if fname.endswith('.gx3') or fname.endswith('.gx'):
+            load_gx(fname, model, optimizer, config)
+        elif fname.endswith('.hgx'):
+            load_hgx(fname, model, optimizer, config)
+        else:
+            raise IOError('Wrong file ending, should be .gx3, .gx or .hgx')
     else:
-        raise IOError('Wrong file ending, should be .gx3, .gx or .hgx')
+        if fname.endswith('.gx'):
+            load_gx(fname, model, optimizer, config)
+        elif fname.endswith('.hgx'):
+            load_hgx(fname, model, optimizer, config)
+        else:
+            raise IOError('Wrong file ending, should be .gx or .hgx')
 
     model.filename = os.path.abspath(fname)
 
@@ -283,10 +303,13 @@ class Config:
         Loads a config from a string str.  Raises an IOError if the string can not be
         read.
         '''
-        buffer = io.StringIO(str)
+        buffer = StringIO(str)
         self.model_config = CP.ConfigParser()
         try:
-            self.model_config.read_file(buffer)
+            if sys.version_info.major == 3:
+                self.model_config.read_file(buffer)
+            else:
+                self.model_config.readfp(buffer)
         except Exception as e:
             raise IOError('Could not load model config file')
         
@@ -375,7 +398,7 @@ class Config:
         dumps the model configuration to a string.
         '''
         # Create a buffer - file like object to trick config parser
-        buffer = io.StringIO()
+        buffer = StringIO()
         # write
         self.model_config.write(buffer)
         # get the string values

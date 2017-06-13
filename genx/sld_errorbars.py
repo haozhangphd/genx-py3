@@ -127,7 +127,10 @@ if __name__ == '__main__':
     parser.add_argument('--step', type=float, default=0.5, help='Step size for the gridding of the SLD')
 
 
-    parser.add_argument('infile', default='', help='The .gx3, .gx or .hgx file to load')
+    if sys.version_info.major == 3:
+        parser.add_argument('infile', default='', help='The .gx3, .gx or .hgx file to load')
+    else:
+        parser.add_argument('infile', default='', help='The .gx or .hgx file to load')
     parser.add_argument('outfile', default='out', help='The output base file name (no extension)')
 
     args = parser.parse_args()
