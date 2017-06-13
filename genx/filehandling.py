@@ -7,10 +7,7 @@ $Rev::                                  $:  Revision of last commit
 $Author::                               $:  Author of last commit
 $Date::                                 $:  Date of last commit
 '''
-try:
-    import configparser as CP
-except ImportError:
-    import configparser as CP
+from six.moves import configparser as CP
 import io
 import os
 

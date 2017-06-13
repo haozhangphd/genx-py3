@@ -9,7 +9,8 @@ $Date::                                 $:  Date of last commit
 import genx.version
 __version__ = genx.version.version
 
-import _thread, time
+from six.moves import _thread
+import time
 import wx, wx.adv, os, traceback
 from wx.lib.wordwrap import wordwrap
 import webbrowser
@@ -17,7 +18,6 @@ import numpy as np
 
 import genx.model as modellib
 import genx.solvergui
-from genx import help
 import genx.filehandling as io
 
 manual_url = 'http://genx.sourceforge.net/doc/'

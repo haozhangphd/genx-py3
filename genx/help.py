@@ -8,7 +8,6 @@ in the models directory.
 import wx, os
 import wx.html as html
 import genx.event_handlers as eh
-import genx.event_handlers as eh
 
 class ExampleHandler:
     '''A class to handle the examples bundled with GenX

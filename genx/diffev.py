@@ -5,7 +5,7 @@ Last changed: 2008 11 23
 '''
 
 from numpy import *
-import _thread
+from six.moves import _thread
 import time
 import random as random_mod
 import sys, os, pickle
