@@ -1,6 +1,7 @@
 import wx
 import math
 import os
+import sys
 
 from wx.lib.intctrl import IntCtrl
 
@@ -47,7 +48,7 @@ class TextObjectValidator(wx.Validator):
             return False
         else:
             textCtrl.SetBackgroundColour(
-                 wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOW))
+                 wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
             textCtrl.Refresh()
             return True
 
@@ -94,7 +95,7 @@ class MatchTextObjectValidator(wx.Validator):
 
         if self.stringlist.__contains__(text):
             textCtrl.SetBackgroundColour(
-                wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOW))
+                wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
             textCtrl.Refresh()
             return True
         else:
@@ -156,7 +157,7 @@ class NoMatchTextObjectValidator(wx.Validator):
             return False
         else:
             textCtrl.SetBackgroundColour(
-                wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOW))
+                wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
             textCtrl.Refresh()
             return True
 
@@ -193,8 +194,10 @@ class NoMatchValidTextObjectValidator(wx.Validator):
                     'pass', 'yield', 'break', 'except', 'import', 'print',\
                     'class', 'exec', 'in', 'raise', 'continue', 'finally', \
                     'is', 'return', 'def', 'for', 'lambda', 'try']
-
-        self.allowed_chars = string.digits+string.letters + '_'
+        if sys.version_info.major == 3:
+            self.allowed_chars = string.digits+string.ascii_letters + '_'
+        else:
+            self.allowed_chars = string.digits+string.letters + '_'
 
     def Clone(self):
         """ Standard cloner.
@@ -238,7 +241,7 @@ class NoMatchValidTextObjectValidator(wx.Validator):
             return False
         else:
             textCtrl.SetBackgroundColour(
-                wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOW))
+                wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
             textCtrl.Refresh()
             return True
 
@@ -298,7 +301,7 @@ class NoMatchTextCtrlValidator(wx.Validator):
             return False
         else:
             textCtrl.SetBackgroundColour(
-                wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOW))
+                wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
             textCtrl.Refresh()
             return True
 
@@ -366,7 +369,7 @@ class FloatObjectValidator(wx.Validator):
                     textCtrl.Refresh()
                     return False
 
-            textCtrl.SetBackgroundColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOW))
+            textCtrl.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
             textCtrl.Refresh()
             return True
 
@@ -436,7 +439,7 @@ class ComplexObjectValidator(wx.Validator):
                     textCtrl.Refresh()
                     return False
                 else:
-                    textCtrl.SetBackgroundColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOW))
+                    textCtrl.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
                     textCtrl.Refresh()
                     return True
         except Exception as S:
@@ -447,13 +450,13 @@ class ComplexObjectValidator(wx.Validator):
                 textCtrl.Refresh()
                 return False
             else:
-                textCtrl.SetBackgroundColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOW))
+                textCtrl.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
                 textCtrl.Refresh()
                 return True
         else:
             #print 'OK'
             textCtrl.SetBackgroundColour(
-                wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOW))
+                wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
             textCtrl.Refresh()
             return True
 
@@ -858,7 +861,7 @@ class ValidateBaseNotebookDialog(ValidateBaseDialog):
                     #text += '\''
                     p[page][par] = text
                 else:
-                    p[page][par] = self.text_controls[page][par].GetValue()
+                    p[page][par] = float(self.text_controls[page][par].GetValue())
         return p
     
     def GetChanges(self):
@@ -987,7 +990,7 @@ class FitSelectorCombo(wx.ComboCtrl):
     def create_button_bitmap(self):
         # make a custom bitmap showing "F"
         bw, bh = 14, 16
-        bmp = wx.EmptyBitmap(bw, bh)
+        bmp = wx.Bitmap(bw, bh)
         dc = wx.MemoryDC(bmp)
         # clear to a specific background colour
         bgcolor = wx.Colour(255, 254, 255)
@@ -1072,7 +1075,7 @@ class ParameterExpressionCombo(wx.ComboCtrl):
     def create_button_bitmap(self):
         # make a custom bitmap showing "F"
         bw, bh = 14, 16
-        bmp = wx.EmptyBitmap(bw, bh)
+        bmp = wx.Bitmap(bw, bh)
         dc = wx.MemoryDC(bmp)
         # clear to a specific background colour
         bgcolor = wx.Colour(255, 254, 255)
