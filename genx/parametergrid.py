@@ -823,7 +823,7 @@ class ParameterGrid(wx.Panel):
         # table and will destroy it when done.  Otherwise you would need to keep
         # a reference to it and call it's Destroy method later.
         self.grid.SetTable(self.table, True)
-        self.grid.SetSelectionMode(wx.grid.Grid.GridSelectRows)
+        self.grid.SetSelectionMode(wx.grid.Grid.SelectRows)
         #self.grid.SetSelectionBackground()
 
         self.grid.SetRowLabelSize(50)
